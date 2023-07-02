@@ -1,6 +1,6 @@
 # PyPowerEdgeFan
 
-PyPowerEdgeFan is a Python-based fan controller for Dell PowerEdge servers.
+PyPowerEdgeFan is a Python-based PID fan controller for Dell PowerEdge servers.
 
 ## Installation
 
