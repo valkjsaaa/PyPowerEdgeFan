@@ -3,7 +3,7 @@ requires = ["flit_core >=3.2,<4"]
 
 [project]
 name = "poweredge_fan"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
     {name = "Jackie Yang", email = "jackie@jackieyang.me"},
 ]
@@ -11,7 +11,7 @@ readme = "README.md"
 classifiers = ["License :: OSI Approved :: MIT License", "Programming Language :: Python :: 3"]
 urls = {Source = "https://github.com/valkjsaaa/PyPowerEdgeFan"}
 dependencies = [
-    "PySensor",
+    "PySensors",
 ]
 description = "PyPowerEdgeFan is a Python-based PID fan controller for Dell PowerEdge servers."
 

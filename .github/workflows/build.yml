@@ -1,12 +1,12 @@
-name: Publish to PyPI
+name: Build package
 
 on:
   push:
-    tags:
-      - v*
+    branches:
+      - main
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -25,9 +25,3 @@ jobs:
 
       - name: Build package
         run: flit build
-
-      - name: Publish package to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
