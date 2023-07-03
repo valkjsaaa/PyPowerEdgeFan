@@ -3,7 +3,7 @@ requires = ["flit_core >=3.2,<4"]
 
 [project]
 name = "poweredge_fan"
-version = "1.0.3"
+version = "1.0.4"
 authors = [
     {name = "Jackie Yang", email = "jackie@jackieyang.me"},
 ]
