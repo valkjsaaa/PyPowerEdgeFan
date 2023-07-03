@@ -104,7 +104,7 @@ def main():
     args = arg_parser.parse_args()
     ipmi = IPMIControl(args.host, args.username, args.password)
     try:
-        main()
+        loop()
     finally:
         ipmi.set_fan_automatic()
 

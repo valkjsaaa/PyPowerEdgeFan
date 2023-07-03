@@ -1,0 +1,14 @@
+[Unit]
+Description=PowerEdge Fan Controller
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Environment=HOST=<host>
+Environment=USERNAME=<username>
+Environment=PASSWORD=<password>
+ExecStart=/usr/local/bin/poweredge_fan  -H $HOST -U $USERNAME -P $PASSWORD
+
+[Install]
+WantedBy=multi-user.target
