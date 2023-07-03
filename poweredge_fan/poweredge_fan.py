@@ -62,7 +62,7 @@ def set_fan_speed(speed):
 last_sensor_values = []
 last_sensor_values_count = 20
 
-def main():
+def loop():
     # PID parameters and target temperature
     Kp = 3
     Ki = 0.3
@@ -100,11 +100,13 @@ def main():
             ipmi.set_fan_automatic()
             time.sleep(1)
 
-
-if __name__ == "__main__":
+def main():
     args = arg_parser.parse_args()
     ipmi = IPMIControl(args.host, args.username, args.password)
     try:
         main()
     finally:
         ipmi.set_fan_automatic()
+
+if __name__ == "__main__":
+    main()
