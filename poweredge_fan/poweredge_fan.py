@@ -101,6 +101,7 @@ def loop():
             time.sleep(1)
 
 def main():
+    global ipmi
     args = arg_parser.parse_args()
     ipmi = IPMIControl(args.host, args.username, args.password)
     try:
