@@ -16,7 +16,11 @@ def get_all_sensors() -> [float]:
     sensors.init()
     try:
         for chip in sensors.iter_detected_chips():
+            if not chip.prefix.startswith(b"coretemp"):
+                continue
             for feature in chip:
+                if not feature.name.startswith("temp"):
+                    continue
                 all_sensors_value.append(feature.get_value())
     finally:
         sensors.cleanup()
