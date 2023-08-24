@@ -5,9 +5,9 @@ from subprocess import TimeoutExpired
 from poweredge_fan.hardware import IPMIControl, get_all_sensors
 
 arg_parser = argparse.ArgumentParser(description='PowerEdge Fan Controller')
-arg_parser.add_argument('-H', '--host', type=str, help='IP address of the iDRAC', required=True)
-arg_parser.add_argument('-U', '--username', type=str, help='Username for the iDRAC', required=True)
-arg_parser.add_argument('-P', '--password', type=str, help='Password for the iDRAC', required=True)
+arg_parser.add_argument('-H', '--host', type=str, help='IP address of the iDRAC')
+arg_parser.add_argument('-U', '--username', type=str, help='Username for the iDRAC')
+arg_parser.add_argument('-P', '--password', type=str, help='Password for the iDRAC')
 arg_parser.add_argument('-H', '--high', type=float, help='Highest fan output', required=True)
 arg_parser.add_argument('-L', '--low', type=float, help='Lowest fan output', required=True)
 arg_parser.add_argument('-T', '--target', type=float, help='Target temperature', required=True)
@@ -53,23 +53,20 @@ class PIDController:
         # Return the PID output for fan speed adjustment
         return proportional + self.integral + derivative
 
-
-def get_cpu_temperature():
-    temp_dict = ipmi.get_temperatures()
-    return max(temp_dict["cpu_temps"])
-
-
-def set_fan_speed(speed):
-    # keep speed within 0-100:
-    speed = -speed
-    speed = max(min(speed, self.high), self.low)
-    ipmi.set_fan_speed(int(speed))
-    pass
-
 last_sensor_values = []
 last_sensor_values_count = 20
 
 def loop(args):
+    def get_cpu_temperature():
+        temp_dict = ipmi.get_temperatures()
+        return max(temp_dict["cpu_temps"])
+
+    def set_fan_speed(speed):
+        # keep speed within 0-100:
+        speed = -speed
+        speed = max(min(speed, args.high), args.low)
+        ipmi.set_fan_speed(int(speed))
+        pass
     # PID parameters and target temperature
     Kp = 3
     Ki = 0.3
@@ -110,7 +107,11 @@ def loop(args):
 def main():
     global ipmi
     args = arg_parser.parse_args()
-    ipmi = IPMIControl(args.host, args.username, args.password)
+    ipmi = IPMIControl(
+        None if args.host == "" else args.host,
+        None if args.username == "" else args.username,
+        None if args.passwrd ==""  else args.password
+    )
     try:
         loop(args)
     finally:

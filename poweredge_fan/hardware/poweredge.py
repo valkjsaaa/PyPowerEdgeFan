@@ -8,6 +8,11 @@ class IPMIControl:
         self.IPMIHOST = ipmihost
         self.IPMIUSER = ipmiuser
         self.IPMIPW = ipmipw
+        if self.IPMIHOST is None or self.IPMIUSER is None or self.IPMIPW is None:
+            print("IPMIHOST, IPMIUSER, and IPMIPW not set, using local")
+            self.local = True
+        else:
+            self.local = False
         self.IPMIEK = ipmiek
         self.CPUID0 = cpuid0
         self.CPUID1 = cpuid1
@@ -15,8 +20,11 @@ class IPMIControl:
         self.EXHAUST_ID = exhaust_id
 
     def run_ipmi_command(self, command_args):
-        ipmi_base_command = ["ipmitool", "-I", "lanplus", "-H", self.IPMIHOST, "-U", self.IPMIUSER, "-P", self.IPMIPW,
-                             "-y", self.IPMIEK]
+        if self.local:
+            ipmi_base_command = ["ipmitool", "-I", "open", "-y", self.IPMIEK]
+        else:
+            ipmi_base_command = ["ipmitool", "-I", "lanplus", "-H", self.IPMIHOST, "-U", self.IPMIUSER, "-P", self.IPMIPW,
+                                 "-y", self.IPMIEK]
         return subprocess.check_output(ipmi_base_command + command_args, timeout=10).decode("utf-8")
 
     def get_temperatures(self):
