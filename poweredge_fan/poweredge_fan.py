@@ -110,7 +110,7 @@ def main():
     ipmi = IPMIControl(
         None if args.host == "" else args.host,
         None if args.username == "" else args.username,
-        None if args.passwrd ==""  else args.password
+        None if args.password ==""  else args.password
     )
     try:
         loop(args)
