@@ -2,7 +2,7 @@ import argparse
 import time
 from subprocess import TimeoutExpired
 
-from poweredge_fan.hardware import IPMIControl, get_all_sensors
+from .hardware import IPMIControl, get_all_sensors
 
 arg_parser = argparse.ArgumentParser(description='PowerEdge Fan Controller')
 arg_parser.add_argument('-H', '--host', type=str, help='IP address of the iDRAC')
