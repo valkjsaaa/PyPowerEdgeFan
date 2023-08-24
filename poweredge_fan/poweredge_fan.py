@@ -2,13 +2,13 @@ import argparse
 import time
 from subprocess import TimeoutExpired
 
-from .hardware import IPMIControl, get_all_sensors
+from hardware import IPMIControl, get_all_sensors
 
 arg_parser = argparse.ArgumentParser(description='PowerEdge Fan Controller')
 arg_parser.add_argument('-H', '--host', type=str, help='IP address of the iDRAC')
 arg_parser.add_argument('-U', '--username', type=str, help='Username for the iDRAC')
 arg_parser.add_argument('-P', '--password', type=str, help='Password for the iDRAC')
-arg_parser.add_argument('-H', '--high', type=float, help='Highest fan output', required=True)
+arg_parser.add_argument('-I', '--high', type=float, help='Highest fan output', required=True)
 arg_parser.add_argument('-L', '--low', type=float, help='Lowest fan output', required=True)
 arg_parser.add_argument('-T', '--target', type=float, help='Target temperature', required=True)
 

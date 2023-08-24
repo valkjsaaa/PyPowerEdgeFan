@@ -5,4 +5,4 @@ COPY requirements.txt /PyPowerEdgeFan/
 RUN apt-get update && apt-get install -y lm-sensors ipmitool
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 COPY . /PyPowerEdgeFan
-CMD python ./poweredge_fan/poweredge_fan.py -H $HOST -U $USERNAME -P $PASSWORD -H $HIGH -L $LOW -T $TARGET
+CMD python ./poweredge_fan/poweredge_fan.py -H $HOST -U $USERNAME -P $PASSWORD -I $HIGH -L $LOW -T $TARGET
