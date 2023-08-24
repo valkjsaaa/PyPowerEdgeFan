@@ -8,11 +8,15 @@ arg_parser = argparse.ArgumentParser(description='PowerEdge Fan Controller')
 arg_parser.add_argument('-H', '--host', type=str, help='IP address of the iDRAC', required=True)
 arg_parser.add_argument('-U', '--username', type=str, help='Username for the iDRAC', required=True)
 arg_parser.add_argument('-P', '--password', type=str, help='Password for the iDRAC', required=True)
+arg_parser.add_argument('-H', '--high', type=float, help='Highest fan output', required=True)
+arg_parser.add_argument('-L', '--low', type=float, help='Lowest fan output', required=True)
+arg_parser.add_argument('-T', '--target', type=float, help='Target temperature', required=True)
+
 
 ipmi: IPMIControl
 
 class PIDController:
-    def __init__(self, Kp, Ki, Kd, setpoint):
+    def __init__(self, Kp, Ki, Kd, setpoint, high, low):
         self.Kp = Kp
         self.Ki = Ki
         self.Kd = Kd
@@ -21,6 +25,9 @@ class PIDController:
         self.integral = -46
         self.last_error = 0
         self.last_time = time.time()
+
+        self.high = high
+        self.low = low
 
     def update(self, current_temperature):
         # Calculate the error and time difference
@@ -55,21 +62,21 @@ def get_cpu_temperature():
 def set_fan_speed(speed):
     # keep speed within 0-100:
     speed = -speed
-    speed = max(min(speed, 100), 5)
+    speed = max(min(speed, self.high), self.low)
     ipmi.set_fan_speed(int(speed))
     pass
 
 last_sensor_values = []
 last_sensor_values_count = 20
 
-def loop():
+def loop(args):
     # PID parameters and target temperature
     Kp = 3
     Ki = 0.3
     Kd = 0.1
-    target_temperature = 60
+    target_temperature = args.target
 
-    pid_controller = PIDController(Kp, Ki, Kd, target_temperature)
+    pid_controller = PIDController(Kp, Ki, Kd, target_temperature, args.high, args.low)
 
     # Main loop to update the fan speed based on PID output
     while True:
@@ -105,7 +112,7 @@ def main():
     args = arg_parser.parse_args()
     ipmi = IPMIControl(args.host, args.username, args.password)
     try:
-        loop()
+        loop(args)
     finally:
         ipmi.set_fan_automatic()
 
