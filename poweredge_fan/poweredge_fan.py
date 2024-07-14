@@ -14,6 +14,7 @@ arg_parser.add_argument('-T', '--target', type=float, help='Target temperature',
 arg_parser.add_argument('-Kp', '--kp', type=float, help='PID P', required=False, default=3)
 arg_parser.add_argument('-Ki', '--ki', type=float, help='PID I', required=False, default=0.3)
 arg_parser.add_argument('-Kd', '--kd', type=float, help='PID D', required=False, default=0.1)
+arg_parser.add_argument('-d', '--loopdelay', type=float, help='PID Loop delay', required=False, default=0.1)
 
 
 ipmi: IPMIControl
@@ -100,7 +101,7 @@ def loop(args):
             set_fan_speed(pid_output)
 
             # # Sleep for some time to avoid excessive adjustments
-            time.sleep(0.1)
+            time.sleep(args.loopdelay)
         except TimeoutExpired as e:
             print("Timeout expired, skipping update")
             print(e)
