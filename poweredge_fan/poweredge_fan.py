@@ -11,6 +11,9 @@ arg_parser.add_argument('-P', '--password', type=str, help='Password for the iDR
 arg_parser.add_argument('-I', '--high', type=float, help='Highest fan output', required=True)
 arg_parser.add_argument('-L', '--low', type=float, help='Lowest fan output', required=True)
 arg_parser.add_argument('-T', '--target', type=float, help='Target temperature', required=True)
+arg_parser.add_argument('-Kp', '--kp', type=float, help='PID P', required=False, default=3)
+arg_parser.add_argument('-Ki', '--ki', type=float, help='PID I', required=False, default=0.3)
+arg_parser.add_argument('-Kd', '--kd', type=float, help='PID D', required=False, default=0.1)
 
 
 ipmi: IPMIControl
@@ -68,9 +71,9 @@ def loop(args):
         ipmi.set_fan_speed(int(speed))
         pass
     # PID parameters and target temperature
-    Kp = 3
-    Ki = 0.3
-    Kd = 0.1
+    Kp = args.kp
+    Ki = args.ki
+    Kd = args.kd
     target_temperature = args.target
 
     pid_controller = PIDController(Kp, Ki, Kd, target_temperature, args.high, args.low)
