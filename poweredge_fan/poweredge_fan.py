@@ -60,11 +60,26 @@ def get_cpu_temperature():
     return max(temp_dict["cpu_temps"])
 
 
+# Global variable for last fan speed
+last_fan_speed = None
+
 def set_fan_speed(speed):
+    global last_fan_speed
     # keep speed within 0-100:
     speed = -speed
     speed = max(min(speed, 100), 5)
+    
+    # Smooth transition to the target speed
+    if last_fan_speed is None:
+        last_fan_speed = speed
+    
+    step = 5  # Max RPM increment per adjustment
+    if abs(speed - last_fan_speed) > step:
+        speed = last_fan_speed + step if speed > last_fan_speed else last_fan_speed - step
+
+    # Update the fan speed and the last_fan_speed
     ipmi.set_fan_speed(int(speed))
+    last_fan_speed = speed
     pass
 
 last_sensor_values = []
